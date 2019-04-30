@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model GithubSample.Models.User
+
+<br /><br />
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+    <div class="input-group">
+        @Html.TextBox("username", null, new { @class = "form-control", @placeholder = "Search github user" })
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Search</button>
+        </span>
+    </div>
+}
+
+
+
+@if (Model != null)
+{
+    <div class="container-lg mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <a href="@Url.Content(Model.Avatar_url)" aria-hidden="true">
+                        <img class="card-img-top" src="@Url.Content(Model.Avatar_url)" alt="Avatar" width="230" height="230">
+                    </a>
+                    <div class="caption">
+                        <h3>@Model.Name</h3>
+                        <small class="text-muted">@Model.Login</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                @if (Model.Repositories.Count > 0)
+                {
+                    <h3>Popular repositories</h3>
+                    <div class="row thumbnail-row">
+
+                        @foreach (var repo in Model.Repositories)
+                        {
+                            <div class="col-md-6">
+                                <div class="thumbnail">
+                                    <div class="caption">
+                                        <a href="@repo.Url" aria-hidden="true"> <h5>@repo.Name</h5></a>
+                                    </div>
+                                    <div class="caption">
+                                        <small>@repo.Description</small>
+                                    </div>
+                                    <p class="caption">
+                                        <span class="mr-3">@repo.Language</span>
+
+                                        <a href="@repo.Stargazers_url" aria-hidden="true">
+                                            <span class="glyphicon glyphicon-star" aria-hidden="true">@repo.Stargazers_count</span>
+                                        </a>
+                                    </p>
+                                    <p class="caption">
+                                        <small class="text-muted">@repo.Updated_at.ToLongDateString()</small>
+                                    </p>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <h3>No repositories found</h3>
+                }
+            </div>
+
+        </div>
+    </div>
+}
+
